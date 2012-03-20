@@ -12,10 +12,11 @@ on early-init
     mkdir /Removable 0755 media_rw media_rw
 
     # make the pathes for the external media mounts
-    mkdir /Removable/MicroSD 0666 system system
-    mkdir /Removable/USBdisk1 0666 system system
-    mkdir /Removable/USBdisk2 0666 system system
-    mkdir /Removable/SD 0666 system system
+    mkdir /mnt/microsd 0666 system system
+    mkdir /mnt/ext_sd 0666 system system
+    mkdir /mnt/usbdisk1 0666 system system
+    mkdir /mnt/usbdisk2 0666 system system
+
 on fs
     mount ext4 /dev/block/mmcblk0p1 /system wait ro
     setprop ro.crypto.tmpfs_options size=128m,mode=0771,uid=1000,gid=1000
@@ -39,12 +40,12 @@ on post-fs-data
     setprop vold.post_fs_data_done 1
 
     # ATD test command interface
-#    symlink /sys/bus/i2c/drivers/asusdec/1-0019/ec_lid /data/data/hallsensor_status
-#    symlink /sys/bus/i2c/drivers/asusdec/1-0019/ec_status /data/data/docking_status
-#    symlink /sys/bus/i2c/drivers/asusdec/1-0019/ec_info /data/data/docking_ecinfo
-#    symlink /sys/bus/i2c/drivers/asusdec/1-0019/ec_dock_battery /data/data/docking_battery
-#    symlink /sys/bus/i2c/drivers/asuspec/1-0015/ec_status /data/data/ec_status
-#    symlink /sys/bus/i2c/drivers/asuspec/1-0015/ec_info /data/data/ec_version
+    symlink /sys/bus/i2c/drivers/asusdec/1-0019/ec_lid /data/data/hallsensor_status
+    symlink /sys/bus/i2c/drivers/asusdec/1-0019/ec_status /data/data/docking_status
+    symlink /sys/bus/i2c/drivers/asusdec/1-0019/ec_info /data/data/docking_ecinfo
+    symlink /sys/bus/i2c/drivers/asusdec/1-0019/ec_dock_battery /data/data/docking_battery
+    symlink /sys/bus/i2c/drivers/asuspec/1-0015/ec_status /data/data/ec_status
+    symlink /sys/bus/i2c/drivers/asuspec/1-0015/ec_info /data/data/ec_version
 
 on boot
 
@@ -90,8 +91,8 @@ on boot
     chown system system /sys/module/cpu_tegra/parameters/pwr_cap_limit_4
 
 # Sensor
-#    mkdir /data/sensors 0751 system system
-#    mkdir /data/lightsensor 0751 system system
+    mkdir /data/sensors 0751 system system
+    mkdir /data/lightsensor 0751 system system
     chmod 666 /dev/nvhost-ctrl
     chmod 666 /dev/nvhost-display
     chmod 666 /dev/nvhost-dsi
@@ -229,12 +230,12 @@ service iprenew_bnep0 /system/bin/dhcpcd -n
     disabled
     oneshot
 
-#Sensor: load calibration files.
-#    service sensors-config /system/bin/sensors-config
-#    class main
-#    user root
-#    oneshot
-#Sensor load calibration files end
+Sensor: load calibration files.
+    service sensors-config /system/bin/sensors-config
+    class main
+    user root
+    oneshot
+Sensor load calibration files end
 
 # create virtual SD card at /mnt/sdcard, based on the /data/media directory
 # deamon will drop to user/group system/media_rw after initializing
@@ -386,12 +387,12 @@ on property:ro.carrier=wifi-only
 #    user root
 #    group root
 
-service ps3service /system/bin/ps3service
-    class main
-    user root
-    group root
-    disabled
-    oneshot
+#service ps3service /system/bin/ps3service
+#    class main
+#    user root
+#    group root
+#    disabled
+#    oneshot
 
 on property:dev.bootcomplete=1
     chown system system /sys/devices/platform/tegra_grhost/enable_3d_scaling
@@ -421,11 +422,11 @@ service touch_update /system/bin/touch_fw_update --default
     disabled
     oneshot
 
-#on property:init.svc.sensors-config=stopped
-#    chmod 644 /data/sensors/AMI304_Config.ini
-#    chown system system /data/sensors/AMI304_Config.ini
-#    chmod 644 /data/sensors/KXTF9_Calibration.ini
-#    chown system system /data/sensors/KXTF9_Calibration.ini
-#    chmod 644 /data/lightsensor/AL3010_Config.ini
-#    chown system system /data/lightsensor/AL3010_Config.ini
+on property:init.svc.sensors-config=stopped
+    chmod 644 /data/sensors/AMI304_Config.ini
+    chown system system /data/sensors/AMI304_Config.ini
+    chmod 644 /data/sensors/KXTF9_Calibration.ini
+    chown system system /data/sensors/KXTF9_Calibration.ini
+    chmod 644 /data/lightsensor/AL3010_Config.ini
+    chown system system /data/lightsensor/AL3010_Config.ini
 
