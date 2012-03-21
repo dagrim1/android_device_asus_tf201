@@ -42,7 +42,7 @@
 	     android:storageDescription="@string/storage_sd_card"
 	     android:primary="false" 
 	     android:removable="true"/>
-    <storage android:mountPoint="/Removable/microsd" 
+    <storage android:mountPoint="/mnt/microsd" 
 	     android:storageDescription="@string/storage_sd_card" 
 	     android:primary="false"  		     
 	     android:removable="true"/>
