@@ -224,7 +224,7 @@ PRODUCT_COPY_FILES += \
 	packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml
 
 PRODUCT_COPY_FILES +=  \
-    vendor/aokp/prebuilt/hdpi/bootanimation.zip:system/media/bootanimation.zip
+	$(LOCAL_PATH)/prebuilt/bootanimation.zip:system/media/bootanimation.zip
 
 # Build characteristics setting 
 PRODUCT_CHARACTERISTICS := tablet
